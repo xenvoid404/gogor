@@ -8,11 +8,12 @@ import (
 
 func TestGet(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Castella"))
+		_, _ = w.Write([]byte("Castella"))
 	}))
 	defer srv.Close()
 
-	body, err := Get(srv.URL)
+	client := New(srv.URL)
+	body, err := client.Get("/h2h")
 	if err != nil {
 		t.Fatal(err)
 	}

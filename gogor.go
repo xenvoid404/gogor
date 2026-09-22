@@ -3,10 +3,23 @@ package gogor
 import (
 	"io"
 	"net/http"
+	"time"
 )
 
-func Get(url string) (string, error) {
-	resp, err := http.Get(url)
+type Client struct {
+	baseURL    string
+	httpClient *http.Client
+}
+
+func New(baseURL string) *Client {
+	return &Client{
+		baseURL:    baseURL,
+		httpClient: &http.Client{Timeout: 15 * time.Second},
+	}
+}
+
+func (c *Client) Get(path string) (string, error) {
+	resp, err := http.Get(c.baseURL + path)
 	if err != nil {
 		return "", err
 	}
