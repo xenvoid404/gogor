@@ -181,7 +181,9 @@ func (r *Request) do(method string) (*Response, error) {
 	if err != nil {
 		return nil, fmt.Errorf("gogor: request gagal: %w", err)
 	}
-	defer httpResp.Body.Close()
+	defer func() {
+		_ = httpResp.Body.Close()
+	}()
 
 	rawBody, err := io.ReadAll(httpResp.Body)
 	if err != nil {
